@@ -34,6 +34,9 @@ class Game {
         const overlay = document.getElementById('overlay');
         overlay.style.display = 'none';
         
+        // call resetGame() here so it resets each time
+        this.resetGame();
+        
         // call all functions to add random phrase, make it active, then add to display
         this.createPhrases();
         const newPhrase = this.getRandomPhrase();
@@ -42,8 +45,30 @@ class Game {
     };
     
     
-    handleInteraction() {
-        //sup
+    // to handle all user interactions (clicks, etc)
+    handleInteraction(keys) {
+        // locate the letter on each key
+        let userGuess = keys.innerHTML;
+        
+        // if the user clicks the a letter that's in the active phrase...
+        // disable the key, assign it to 'chosen' css, and put correct letter in phrase
+        if (this.activePhrase.checkLetter(userGuess)) {
+            keys.disabled = true;
+            keys.classList.add('chosen');
+            this.activePhrase.showMatchedLetter(userGuess);
+            // if the user continues to guess correctly, eventually they will win & game is over
+            if(this.checkForWin()) {
+                this.gameOver(true);
+            }
+        // if not, 'wrong' css class is assigned, if key is NOT disabled already, make it so, AND remove a heart life
+        } else {
+            keys.classList.add('wrong');
+            if(keys.disabled !== true) {
+                keys.disabled = true;
+                this.removeLife();
+            };
+        };
+        
     };
     
     
@@ -71,13 +96,15 @@ class Game {
         const gameOverMsg = document.getElementById('game-over-message');
         
         // assign hearts to different src path when user guesses incorrectly
-        heartTries[this.missed].setAttribute('src', 'images/lostHeart.png');
+        heartTries[this.missed].src = 'images/lostHeart.png';
+        
         this.missed += 1;
         
         // if missed gets to 5, call gameOver() method
-        if (this.missed === 5) {
-            this.gameOver();
+        if (this.missed >= 5) {
+            this.gameOver(false);
         }
+        
         
     }
     
@@ -85,21 +112,44 @@ class Game {
 
     // gameOver(); method that displays message at end of game accordingly
     gameOver(gameWon) {
+        // define overlay and hide it, define error message
+        const overlay = document.querySelector('#overlay');
         overlay.style.display = '';
-        if (gameWon) {
-            gameOverMsg.textContent = 'Yay you won!! Congrats!';
-            // replace overlay class with 'win', and restart active phrase
-            this.overlay.classList.replace('start', 'win');
-            this.activePhrase = null;
-        } else {
-            gameOverMsg.textContent = 'Aww you lost. Better luck next time!';
-            // replace overlay class with 'lose', and restart active phrase
-            this.overlay.classList.replace('start', 'lose');
-            this.activePhrase = null;
-        }
+        const gameOverMsg = document.getElementById('game-over-message');
         
+        if (gameWon) {
+            gameOverMsg.textContent = 'You won! Congratulations!';
+            overlay.classList.remove('start');
+            overlay.classList.remove('lose');
+            overlay.classList.add('win');
+            //this.activePhrase = null;
+        } else {
+            gameOverMsg.textContent = 'Game Over. Better luck next time!';
+            overlay.classList.remove('start');
+            overlay.classList.remove('win');
+            overlay.classList.add('lose');
+            //this.activePhrase = null;
+        }   
     }
     
+    
+    resetGame() {
+        // empty phrase ul element of all li elements
+        const htmlPhrase = document.getElementById('phrase').firstElementChild;
+        htmlPhrase.innerHTML = '';
+        
+        // put keys in array to access all at the same time
+        const allKeys = [...keys];
+        allKeys.forEach(key => {
+            // update their css classes back to just 'key', and remove 'disabled' attribute
+            key.className = 'key';
+            key.removeAttribute('disabled');
+        })
+        
+        // reset all heart images back to liveHeart.png
+        const heartTries = document.querySelectorAll('img');
+        heartTries.forEach(heart => heart.src = "images/liveHeart.png");
+    }
     
     
     

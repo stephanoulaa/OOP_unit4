@@ -1,2 +1,4 @@
 - add to this when finished
-- add/delete comments
+- style the project a little more (describe style changes here AND in submission)
+- adjust comments
+- add keyup.keydown event listener to app.js
