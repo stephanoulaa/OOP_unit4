@@ -50,16 +50,16 @@ class Game {
     // checkForWin(); method checks if all keys in phrase are guessed
     // if so, the status of the game is win. if not, status of game still false
     checkForWin() {
-        // reference keyboard keys and where letters are being revealed
-        const lettersInPhrase = document.querySelectorAll('.key');
-        const lettersRevealed = document.getElementsByClassName('show');
+        // locate and hidden spaces
+        const hiddenChars = document.getElementsByClassName('hide');
         
-        // if these lengths are equal, game has been won.
-        if (lettersInPhrase.length === lettersRevealed.length) {
-          return true;
+        // if there are NO hidden spaces left, then you have guessed the phrase and won the game
+        if (hiddenChars.length === 0) {
+            return true;
         } else {
-          return false;
-        } 
+            return false;
+        }
+        
         
     };
     
