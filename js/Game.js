@@ -97,7 +97,6 @@ class Game {
         
         // assign hearts to different src path when user guesses incorrectly
         heartTries[this.missed].src = 'images/lostHeart.png';
-        
         this.missed += 1;
         
         // if missed gets to 5, call gameOver() method
@@ -138,6 +137,11 @@ class Game {
         const htmlPhrase = document.getElementById('phrase').firstElementChild;
         htmlPhrase.innerHTML = '';
         
+        
+//        this.createPhrases()
+//        this.missed = 5;
+        
+        
         // put keys in array to access all at the same time
         const allKeys = [...keys];
         allKeys.forEach(key => {
@@ -148,7 +152,10 @@ class Game {
         
         // reset all heart images back to liveHeart.png
         const heartTries = document.querySelectorAll('img');
-        heartTries.forEach(heart => heart.src = "images/liveHeart.png");
+        heartTries.forEach(heart => heart.src = 'images/liveHeart.png');
+        
+        
+        this.missed = 0;
     }
     
     
