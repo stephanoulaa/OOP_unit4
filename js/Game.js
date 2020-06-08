@@ -138,10 +138,6 @@ class Game {
         htmlPhrase.innerHTML = '';
         
         
-//        this.createPhrases()
-//        this.missed = 5;
-        
-        
         // put keys in array to access all at the same time
         const allKeys = [...keys];
         allKeys.forEach(key => {
@@ -156,6 +152,8 @@ class Game {
         
         
         this.missed = 0;
+        this.phrases = this.createPhrases();
+        this.activePhrase = null;
     }
     
     
